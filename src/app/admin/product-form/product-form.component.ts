@@ -5,7 +5,6 @@ import { ProductService } from 'src/app/shared/product.service';
 import { CategoryModel } from 'src/app/shared/categoryModel';
 import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { format } from 'path';
 import { ProductModel } from 'src/app/shared/productModel';
 import { LowerCasePipe } from '@angular/common';
 import { Router } from '@angular/router';
@@ -48,7 +47,6 @@ export class ProductFormComponent implements OnInit {
 
     this.products = this.productService.getProductsByName(productName);
     console.log(this.products);
-    // await this.productService.isProductAlreadyPresent(productName);
   }
 
   save(product: ProductModel) {
