@@ -1,0 +1,9 @@
+label{
+  font-weight: bold;
+}
+
+
+.invalid-input {
+  color: red;
+  font-style: italic;
+}
