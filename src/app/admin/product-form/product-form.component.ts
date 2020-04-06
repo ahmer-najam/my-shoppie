@@ -7,7 +7,9 @@ import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ProductModel } from 'src/app/shared/productModel';
 import { LowerCasePipe } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { UUID } from 'angular2-uuid';
+import { format } from 'path';
 
 @Component({
   selector: 'app-product-form',
@@ -18,19 +20,29 @@ export class ProductFormComponent implements OnInit {
   categories: CategoryModel[];
   isProductPresent: boolean = false;
   products: Observable<any[]>;
+  selectedProduct: ProductModel;
+  productKey;
 
   constructor(
     public productService: ProductService,
     private router: Router,
+    private route: ActivatedRoute,
     private categoryService: CategoryService,
     private firestore: AngularFirestore
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.fillCategoryDdl();
-
+    this.productKey = this.route.snapshot.paramMap.get('id');
+    this.getProductByKey();
   }
 
+  async getProductByKey() {
+    if (this.productKey) {
+      let product: ProductModel[];
+      await this.productService.getProductByKey(this.productKey);
+    }
+  }
   async fillCategoryDdl() {
     this.categoryService.getCategories().subscribe((actionArry) => {
       this.categories = actionArry.map(
@@ -43,8 +55,7 @@ export class ProductFormComponent implements OnInit {
     });
   }
 
-  async checkProductDuplication(productName){
-
+  async checkProductDuplication(productName) {
     this.products = this.productService.getProductsByName(productName);
     console.log(this.products);
   }
@@ -53,18 +64,16 @@ export class ProductFormComponent implements OnInit {
     let productData: ProductModel = {
       title: product.title,
       imageUrl: product.imageUrl,
-      $key: '',
+      $key: UUID.UUID(),
       category: product.category,
       price: product.price,
-      titleLower: product.title.toLowerCase()
-    }
+      titleLower: product.title.toLowerCase(),
+    };
     let result = this.productService.createProduct(productData);
-    this.router.navigate(["/admin/products"]);
+    this.router.navigate(['/admin/products']);
   }
 
-  assignValue(title){
-
-  }
+  assignValue(title) {}
 
   resetForm(form?: NgForm) {
     if (form != null) {

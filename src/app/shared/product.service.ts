@@ -12,12 +12,12 @@ import { CastExpr } from '@angular/compiler';
 })
 export class ProductService {
   products;
+  selectedProduct: ProductModel;
   isDuplicate: boolean;
   constructor(
     private firestore: AngularFirestore,
     private toastr: ToastrService
   ) {}
-
 
   getProductsByName(productName) {
     return this.firestore
@@ -30,7 +30,6 @@ export class ProductService {
   }
 
   async createProduct(product) {
-    console.log(product);
     let ref = this.firestore.collection('products').ref;
 
     let query = ref
@@ -45,5 +44,20 @@ export class ProductService {
           this.toastr.error('Duplicate Product'); //display error
         }
       });
+  }
+
+  async getProductByKey($key) {
+    let product: ProductModel[];
+
+    this.firestore
+      .collection('products', (query) => query.where('$key', '==', $key))
+      .valueChanges()
+      .subscribe((res) => {
+        product = res as ProductModel[];
+        if(product.length > 0){
+          this.selectedProduct = product[0];
+        }
+      });
+
   }
 }
