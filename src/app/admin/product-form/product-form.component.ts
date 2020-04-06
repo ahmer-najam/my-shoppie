@@ -9,7 +9,6 @@ import { ProductModel } from 'src/app/shared/productModel';
 import { LowerCasePipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UUID } from 'angular2-uuid';
-import { format } from 'path';
 
 @Component({
   selector: 'app-product-form',
