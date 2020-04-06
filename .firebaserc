@@ -1,7 +1,0 @@
-{
-  "projects": {
-    "default": "my-shop-54aa3",
-    "staging": "my-shop-54aa3",
-    "prod": "my-shop-54aa3"
-  }
-}
